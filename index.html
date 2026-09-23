@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>電纜槽伸縮節指南</title>
-  <meta name="description" content="Revit 2027 電纜槽伸縮節族製作與專案使用｜文件核對版，待實機驗收">
+  <title>電纜槽伸縮節操作指南</title>
+  <meta name="description" content="Revit 2027 電纜槽伸縮節：新手可直接照做的操作步驟指南">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;800&display=swap" rel="stylesheet">
@@ -15,7 +15,7 @@
 
 <div class="toolbar">
   <div class="toolbar-inner">
-    <strong>電纜槽伸縮節指南</strong>
+    <strong>電纜槽伸縮節操作指南</strong>
     <div class="btns">
       <button id="fs-down" type="button" aria-label="縮小字級">A−</button>
       <button id="fs-up" type="button" aria-label="放大字級">A＋</button>
@@ -27,39 +27,40 @@
 <main>
 
 <header class="hero">
-  <span class="status">文件核對版／待實機驗收</span>
+  <span class="status">新手操作指南｜部分項目未實機測試</span>
   <h1>Revit 2027 電纜槽伸縮節<br>族製作與專案使用</h1>
   <dl class="meta">
     <div><dt>建議檔名</dt><dd class="mono">CTF_電纜槽伸縮節_梯式.rfa</dd></div>
     <div><dt>族類別</dt><dd>電纜槽配件（不是電氣設施）</dd></div>
-    <div><dt>零件類型</dt><dd>Ladder Union／Channel Union</dd></div>
-    <div><dt>適用</dt><dd>梯式、槽式（網格式待定）</dd></div>
+    <div><dt>零件類型</dt><dd>梯式選 Ladder Union，槽式選 Channel Union</dd></div>
+    <div><dt>適用</dt><dd>梯式、槽式（網格式做法待定）</dd></div>
   </dl>
 
   <div class="box danger">
-    <span class="box-title">⚠ 核心警示</span>
-    先取得廠商型錄，再決定尺寸。<strong>「允許位移量」不等於「族可以拉伸的長度」。</strong>本頁所有數值都只是示意，以型錄為準。
+    <span class="box-title">⚠ 開始前一定要知道</span>
+    <p>先拿到廠商型錄再決定尺寸，本頁所有數字都只是練習用示範，不是正式規格。</p>
+    <p><strong>連接器間距</strong>（族裡叫「本體總長度」）跟<strong>允許位移量</strong>是兩個不同的數字，不要搞混、不要互相代入。</p>
   </div>
 
   <div class="box info">
-    <span class="box-title">標記說明</span>
-    <span class="tag t-ok">確認</span> 已讀到官方文件原文支持
-    <span class="tag t-guess">推測</span> 有依據但尚未實測
-    <span class="tag t-na">待實機</span> 繁中 2027 介面或實際行為尚未確認
+    <span class="box-title">怎麼看這一頁</span>
+    下面分成 8 個步驟，照順序做。每個步驟有「操作」（照著點）、「完成後」（應該看到的結果）、「卡住時」（常見問題怎麼處理，只有需要時才出現）。專有名詞第一次出現時，後面會用括號白話解釋一次。
   </div>
 </header>
 
 <nav class="toc" aria-label="目錄">
   <h2>目錄</h2>
   <ol>
-    <li><a href="#concept">核心觀念</a></li>
-    <li><a href="#family">開新族與族類別</a></li>
-    <li><a href="#params">參數表</a></li>
-    <li><a href="#planes">參考平面與鎖定</a></li>
-    <li><a href="#connector">連接器</a></li>
-    <li><a href="#test">族內測試</a></li>
-    <li><a href="#place">專案載入與放置</a></li>
-    <li><a href="#verify">驗證與明細表</a></li>
+    <li><a href="#terms">開始前：兩個名詞</a></li>
+    <li><a href="#prepare">1. 準備族或範本</a></li>
+    <li><a href="#category">2. 族類別與零件類型</a></li>
+    <li><a href="#params">3. 建立尺寸參數</a></li>
+    <li><a href="#planes">4. 參考平面與外形</a></li>
+    <li><a href="#connectors">5. 放置兩端連接器</a></li>
+    <li><a href="#test">6. 切換測試並存檔</a></li>
+    <li><a href="#place">7. 載入專案並連接線架</a></li>
+    <li><a href="#verify">8. 檢查接通與明細表</a></li>
+    <li><a href="#flow">流程圖</a></li>
     <li><a href="#trouble">疑難排解</a></li>
     <li><a href="#accept">最低驗收清單</a></li>
     <li><a href="#open">尚未確認事項</a></li>
@@ -67,9 +68,9 @@
   </ol>
 </nav>
 
-<!-- 1 -->
-<section id="concept">
-  <h2><span class="no">1</span>核心觀念：先分清楚 5 種長度</h2>
+<!-- 0 -->
+<section id="terms">
+  <h2><span class="no">•</span>開始前：兩個容易搞混的名詞</h2>
 
   <figure class="figure" aria-label="伸縮節本體構成示意：左套接、中央可見段、右套接，兩端各一個連接器">
     <div class="body-fig">
@@ -79,309 +80,241 @@
       <div class="seg">右套接</div>
       <div class="con" title="連接器">●</div>
     </div>
-    <div class="dim">◄ 本體總長度 = 兩個連接器的間距 ►</div>
-    <figcaption><span style="color:var(--danger)">●</span> = 連接器｜示意圖，不代表任何廠商產品的比例</figcaption>
+    <div class="dim">◄ 連接器間距（本體總長度） ►</div>
+    <figcaption><span style="color:var(--danger)">●</span> = 連接器（族兩端用來跟線架自動吸附、判斷有沒有接通的小圖示，不是外觀造型）</figcaption>
   </figure>
 
-  <div class="table-wrap"><table>
-    <thead><tr><th>名稱</th><th>意義</th><th>在族裡的角色</th></tr></thead>
-    <tbody>
-      <tr><td><strong>本體總長度</strong></td><td>兩個電纜槽連接器之間的距離</td><td>驅動族長度的基準</td></tr>
-      <tr><td>外觀總長</td><td>幾何外廓的長度</td><td>不當作連接基準</td></tr>
-      <tr><td>套接長度</td><td>接頭或活動片插入本體的長度，可能有重疊</td><td>外觀分段</td></tr>
-      <tr><td><strong>允許位移量</strong></td><td>使用期間可吸收的熱脹冷縮量，例如 ±25 mm</td><td>資訊參數，<strong>不參與幾何公式</strong></td></tr>
-      <tr><td>安裝間隙</td><td>現場安裝時預留的縫隙</td><td>執行個體參數，資訊與標註用</td></tr>
-    </tbody>
-  </table></div>
+  <ul>
+    <li><strong>連接器間距</strong>（族參數建議命名「本體總長度」）：伸縮節兩端連接器之間的距離。這是族的長度公式要用的基準數字。</li>
+    <li><strong>套接長度</strong>：接頭插入本體的長度，只影響外觀怎麼分段，不影響總長度怎麼算。</li>
+    <li><strong>允許位移量</strong>：型錄上「熱脹冷縮可以吸收多少」的數字（例如 ±25 mm），只是標示用途，<strong>不要拿來算族的長度</strong>，也不等於連接器間距。</li>
+  </ul>
 
   <div class="box warn">
-    <span class="box-title">公式前提</span>
-    只有廠商圖面證明各區段<strong>不重疊</strong>時，才能用
-    <code>本體總長度 - 左套接長度 - 右套接長度</code> 算中央可見段。有重疊時，改成照型錄分段建模。
+    <span class="box-title">為什麼要分清楚</span>
+    型錄上這兩個數字通常分開列。如果把允許位移量當成連接器間距去建模，做出來的族長度會是錯的。
   </div>
 </section>
 
-<!-- 2 -->
-<section id="family">
-  <h2><span class="no">2</span>開新族與族類別</h2>
-
-  <h3>建立方式（依優先順序）</h3>
+<!-- 1 -->
+<section id="prepare">
+  <h2><span class="no">1</span>準備族或範本</h2>
   <ol class="steps">
-    <li>從公司現有的「電纜槽聯結配件族」另存新檔，最快也最符合公司標準。</li>
-    <li>沒有既有族時，使用電纜槽配件類範本建立。<span class="tag t-na">待實機</span> 範本檔名以語系資料夾內的實際檔名為準。</li>
+    <li>打開 Revit 2027。</li>
+    <li>檢查公司有沒有現成的「電纜槽聯結配件」族（.rfa）。有的話：<strong>檔案 → 開啟</strong>找到那個檔案，<strong>檔案 → 另存新檔</strong>存成新檔名（例如 <code>CTF_電纜槽伸縮節_梯式.rfa</code>），接著跳到步驟 2。</li>
+    <li>沒有現成族：<strong>檔案 → 新建 → 族</strong>，選電纜槽配件的公制範本（檔名通常包含 <code>Cable Tray Fitting</code> 字樣；繁中版實際顯示名稱還沒實機確認，找不到時用這個英文關鍵字搜尋）。範本資料夾一般在 <code>C:\ProgramData\Autodesk\RVT 2027\Family Templates\&lt;語系資料夾&gt;</code>，實際路徑以「檔案 → 選項 → 檔案位置」顯示的為準。</li>
   </ol>
+  <p><strong>完成後：</strong>畫面開啟一個空白的族編輯環境，標題列顯示副檔名 .rfa。</p>
+  <p><strong>卡住時：</strong>資料夾內沒有任何範本檔案，代表 Revit 安裝不完整，需要修復或重新安裝。</p>
+</section>
 
-  <p>族範本資料夾：</p>
-  <p><code>C:\ProgramData\Autodesk\RVT 2027\Family Templates\&lt;語系資料夾&gt;</code></p>
-  <p>實際位置以「選項 → 檔案位置」顯示的為準。<span class="tag t-ok">確認</span> Autodesk 支援文章說明，範本正常會隨 Revit 一起安裝；資料夾是空的或不存在時，需要修復或重新安裝 Revit。</p>
-
-  <h3>檔名與型式</h3>
-  <ul>
-    <li>一個 <code>.rfa</code> 內建多個型式（例如 200／300／400 mm），<strong>不要每個寬度各做一個檔案</strong>。</li>
-    <li>型式名稱建議和廠商料號對應。</li>
-  </ul>
-
-  <h3>族類別與零件類型</h3>
-  <p>建立 → 族類別和參數：</p>
-  <div class="table-wrap"><table>
-    <thead><tr><th>線架形式</th><th>零件類型（介面英文）</th><th>API 名稱</th></tr></thead>
-    <tbody>
-      <tr><td>梯式</td><td><strong>Ladder Union</strong></td><td><code>LadderCableTrayUnion</code></td></tr>
-      <tr><td>槽式</td><td><strong>Channel Union</strong></td><td><code>ChannelCableTrayUnion</code></td></tr>
-      <tr><td>網格式</td><td colspan="2">官方清單中沒有專用類型，依公司標準及連接測試決定，<strong>不要預設歸為槽式</strong></td></tr>
-    </tbody>
-  </table></div>
-  <ul>
-    <li><span class="tag t-ok">確認</span> Revit 2027 Part Types 文件的電纜槽配件清單中只有 Channel／Ladder 開頭的類型，<strong>沒有單獨的「Union」</strong>，所以不要選 Union。</li>
-    <li><span class="tag t-ok">確認</span> 零件類型的作用是 "only allow replacing a particular part with a similar part"，也就是限制類型選取器只能換成同一類的零件。</li>
-    <li><span class="tag t-na">待實機</span> 繁中介面上的顯示名稱。</li>
-  </ul>
+<!-- 2 -->
+<section id="category">
+  <h2><span class="no">2</span>設定族類別與零件類型</h2>
+  <ol class="steps">
+    <li><strong>建立 → 族類別和參數</strong>。</li>
+    <li>族類別選<strong>「電纜槽配件」</strong>（不是「電氣設施」，選錯的話這個族之後在專案裡會找不到）。</li>
+    <li>零件類型：線架是梯式就選 <strong>Ladder Union</strong>，槽式就選 <strong>Channel Union</strong>。清單裡沒有單獨叫「Union」的選項，不要選那個。</li>
+    <li>線架是網格式的話，目前沒有官方對應類型，先跟公司討論要歸類成哪一種，做出來後再用步驟 7 的連接測試確認會不會通。</li>
+    <li>按<strong>確定</strong>關閉視窗。</li>
+  </ol>
+  <p><strong>完成後：</strong>族類別視窗顯示「電纜槽配件」，零件類型顯示你剛選的 Union 類型。</p>
+  <p><strong>卡住時：</strong>繁中介面上實際顯示的中文字樣還沒實機確認過，找不到一模一樣的字時，用英文 Ladder Union／Channel Union 對照著找。</p>
 
   <div class="box danger">
-    <span class="box-title">⚠ 不要設成線架類型的預設聯結</span>
-    <p>聯結配件是設定在「電纜槽類型」上（API 參數 <code>RBS_CURVETYPE_DEFAULT_UNION_PARAM</code>），設定後會套用到該類型的所有線架。</p>
-    <p><span class="tag t-guess">推測</span> 如果把伸縮節設成預設聯結，每個接頭都可能變成伸縮節。<strong>預設聯結維持一般接續片，伸縮節一律手動放置。</strong></p>
+    <span class="box-title">⚠ 不要把伸縮節設成線架的預設接頭</span>
+    這個設定是在「電纜槽類型」裡，設下去之後，那個類型底下每一個接頭都可能自動變成伸縮節。伸縮節請維持手動放置，不要設成預設。
   </div>
 </section>
 
 <!-- 3 -->
 <section id="params">
-  <h2><span class="no">3</span>參數表（建議）</h2>
-  <p>原則：<strong>廠商固定的用「型式」，現場會變的用「執行個體」。</strong></p>
-
-  <div class="table-wrap"><table>
-    <thead><tr><th>參數名稱</th><th>類型</th><th>建議值</th><th>用途</th><th>共用參數</th></tr></thead>
-    <tbody>
-      <tr><td>標稱寬度</td><td>型式</td><td>200／300／400 mm</td><td>驅動幾何與連接器寬度</td><td>否</td></tr>
-      <tr><td>標稱高度</td><td>型式</td><td>依型錄</td><td>驅動幾何與連接器高度</td><td>否</td></tr>
-      <tr><td>本體總長度</td><td>型式</td><td>依型錄（固定）</td><td>兩連接器間距</td><td>否</td></tr>
-      <tr><td>左套接長度<br>右套接長度</td><td>型式</td><td>依型錄</td><td>外觀分段</td><td>否</td></tr>
-      <tr><td>中央可見段</td><td>公式</td><td><code>本體總長度 - 左套接長度 - 右套接長度</code></td><td>幾何驅動（僅限不重疊時）</td><td>否</td></tr>
-      <tr><td>安裝間隙</td><td>執行個體</td><td>現場值</td><td>資訊／標註</td><td>是（自訂）</td></tr>
-      <tr><td>允許位移量</td><td>型式</td><td>依型錄，例如 25 mm</td><td>資訊用，不參與長度運算。要顯示「±」可另加文字參數</td><td>是（自訂）</td></tr>
-      <tr><td>製造商／型號／URL</td><td>型式</td><td>文字</td><td>料表</td><td>否（使用識別資料內建參數）</td></tr>
-    </tbody>
-  </table></div>
-
-  <ul>
-    <li>公式欄只輸入等號右邊的運算式，不含「=」。</li>
-    <li>公式用參數名稱互相計算，<strong>不要寫死數字</strong>。如果一定要寫數字，建議加上單位，例如 <code>200 mm</code>。<span class="tag t-guess">推測</span> 需實測確認。</li>
-    <li>要放進明細表或標籤的<strong>自訂</strong>欄位才需要共用參數，並沿用公司既有的 GUID。<span class="tag t-guess">推測</span> 製造商、型號請在族類型對話框的「識別資料」確認是否為內建參數。</li>
-  </ul>
-
-  <details>
-    <summary>選用：同一型號有多種長度規格時（可變長度寫法）</summary>
-    <p>只有在型錄<strong>明確列出多種本體長度</strong>時才使用。範圍數值請照型錄填寫，下面的 150～500 mm 只是示意。</p>
-    <div class="table-wrap"><table>
-      <thead><tr><th>參數</th><th>類型</th><th>公式</th></tr></thead>
-      <tbody>
-        <tr><td>長度_輸入</td><td>執行個體</td><td>使用者輸入</td></tr>
-        <tr><td>長度_受控</td><td>執行個體</td><td><code>if(長度_輸入 &lt; 150 mm, 150 mm, if(長度_輸入 &gt; 500 mm, 500 mm, 長度_輸入))</code></td></tr>
-      </tbody>
-    </table></div>
-    <p>Revit 參數本身沒有最小值、最大值的欄位，只能用 <code>if()</code> 把數值限制在範圍內。</p>
-  </details>
+  <h2><span class="no">3</span>建立尺寸參數</h2>
+  <ol class="steps">
+    <li><strong>建立 → 族類型</strong>，開啟參數管理視窗。</li>
+    <li>新增以下型式參數（類型都選「長度」）：<strong>標稱寬度</strong>、<strong>標稱高度</strong>、<strong>本體總長度</strong>、<strong>左套接長度</strong>、<strong>右套接長度</strong>。</li>
+    <li>新增一個公式參數<strong>中央可見段</strong>，公式欄只填等號右邊：<code>本體總長度 - 左套接長度 - 右套接長度</code>。<strong>只有型錄證明左右套接不重疊時才能用這條公式</strong>，有重疊的話要照型錄分段直接填數字，不能用這條公式硬算。</li>
+    <li>新增一個文字型式參數<strong>允許位移量</strong>，只用來顯示型錄上的數字（例如 <code>±25 mm</code>），不要用在任何公式裡。</li>
+    <li>建立幾個型式，名稱建議對應廠商料號（例如 200、300、400），每個型式分別填入實際數字。<strong>沒有型錄之前，先填一組練習用數字，記得拿到型錄後要整批換掉，不要當成正式規格使用。</strong></li>
+    <li>把<strong>安裝間隙</strong>設成「執行個體」參數（不是型式），因為每個現場的間隙可能不一樣。</li>
+    <li>按<strong>確定</strong>存檔。</li>
+  </ol>
+  <p><strong>完成後：</strong>族類型視窗的下拉清單看得到所有型式，切換型式時每個型式底下的數字都不一樣。</p>
+  <p><strong>卡住時：</strong>「中央可見段」算出負數或紅字錯誤，通常是套接長度比本體總長度還長，回頭核對型錄數字有沒有打錯。</p>
+  <p>如果同一型號未來有多種長度規格，等拿到型錄數字後，用「新增型式」的方式各開一個對應的型式即可，不要用公式硬做出沒有產品依據的任意長度。</p>
 </section>
 
 <!-- 4 -->
 <section id="planes">
-  <h2><span class="no">4</span>參考平面與鎖定</h2>
-
-  <div class="table-wrap"><table>
-    <thead><tr><th>視圖</th><th>參考平面</th><th>標註與參數</th></tr></thead>
-    <tbody>
-      <tr><td>平面視圖</td><td>前／中心／後</td><td>用 EQ 讓前後等分，總寬綁「標稱寬度」</td></tr>
-      <tr><td>立面或剖面</td><td>上／下（加上高度基準）</td><td>綁「標稱高度」</td></tr>
-      <tr><td>長度方向</td><td>左端連接面／左套接分界／中心／右套接分界／右端連接面</td><td>兩端之間綁「本體總長度」，兩端的套接段綁左、右套接長度</td></tr>
-    </tbody>
-  </table></div>
-
-  <h3>鎖定原則</h3>
-  <ul>
-    <li>所有實體面都用 <strong>AL（對齊）</strong>對齊到對應的參考平面，再點鎖頭。</li>
-    <li><strong>中央段兩端也要鎖</strong>到「左、右套接分界」。它是由參考平面之間的尺寸參數驅動才會變長變短，<strong>不鎖就不會跟著動</strong>。</li>
-    <li>建議不要把實體面直接鎖到另一個實體面，比較不容易發生過度約束。這是業界經驗做法，不是官方規定。</li>
-  </ul>
-
-  <h3>詳細等級</h3>
-  <div class="table-wrap"><table>
-    <thead><tr><th>詳細程度</th><th>顯示內容</th></tr></thead>
-    <tbody>
-      <tr><td>粗略</td><td>外框或簡單長方體</td></tr>
-      <tr><td>中等</td><td>主要接頭、中央段</td></tr>
-      <tr><td>精細</td><td>壓板、螺栓等必要外觀</td></tr>
-    </tbody>
-  </table></div>
+  <h2><span class="no">4</span>畫參考平面與外形，設定尺寸控制</h2>
+  <ol class="steps">
+    <li>切到樓層平面視圖，<strong>建立 → 參考平面</strong>畫出前、中心、後三條線，前後兩條用尺寸標註加上 <strong>EQ</strong>（讓兩段距離自動相等，中心線保持置中），總寬度的標註關聯到「標稱寬度」參數。</li>
+    <li>切到立面或剖面視圖，畫上、下兩條參考平面，標註關聯到「標稱高度」參數。</li>
+    <li>切到能看到族長度方向的視圖，沿長度方向由左到右畫 5 條參考平面：左端連接面、左套接分界、中心、右套接分界、右端連接面。</li>
+    <li>左端連接面到右端連接面的標註關聯「本體總長度」；左端連接面到左套接分界關聯「左套接長度」；右端同樣的方式關聯「右套接長度」。</li>
+    <li>用擠出等工具畫出本體的實體幾何。每個實體面都用<strong>對齊</strong>（AL）貼齊對應的參考平面，貼齊後點一下鎖頭圖示鎖定。中央段幾何位在左套接分界與右套接分界之間，<strong>這兩端的面也要鎖到這兩條參考平面</strong>，不鎖的話改尺寸時中央段不會跟著變長變短。</li>
+    <li>不需要把每個面都重複互相鎖定，鎖到對應的參考平面就夠了；也不要把一個實體面直接鎖到另一個實體面，改用鎖參考平面，比較不容易出現「過度約束」的錯誤。</li>
+  </ol>
+  <p><strong>完成後：</strong>在族類型視窗切換不同型式，或改標稱寬度、標稱高度的數字，幾何和參考平面會跟著連動變化。</p>
+  <p><strong>卡住時：</strong>出現「無法保持這些造型限制條件」的警告，通常是同一個面被鎖了兩次，或鎖到錯的參考平面，檢查剛剛新增的鎖頭位置。</p>
 </section>
 
 <!-- 5 -->
-<section id="connector">
-  <h2><span class="no">5</span>連接器</h2>
-  <p>建立 → 電纜槽連接器，左右端面各放 1 個。</p>
-  <p><span class="tag t-ok">確認</span> 官方文件說明連接器可以放在「面」或「工作平面」上，其中放在面上是建議的做法（"the recommended method"）。</p>
-
-  <ul class="checklist">
-    <li><label><input type="checkbox" data-id="c1"><span>連接器類型是「電纜槽」</span></label></li>
-    <li><label><input type="checkbox" data-id="c2"><span>寬度關聯「標稱寬度」、高度關聯「標稱高度」（兩個都要綁）</span></label></li>
-    <li><label><input type="checkbox" data-id="c3"><span>位在真正的端面（左、右端連接面）</span></label></li>
-    <li><label><input type="checkbox" data-id="c4"><span>兩個連接器方向相反，都朝向族外側</span></label></li>
-    <li><label><input type="checkbox" data-id="c5"><span>連接器中心和族軸線重合</span></label></li>
-    <li><label><input type="checkbox" data-id="c6"><span>端面已鎖定參考平面，族內沒有多餘的連接器</span></label></li>
-  </ul>
+<section id="connectors">
+  <h2><span class="no">5</span>放置兩端連接器，設定寬、高及方向</h2>
+  <ol class="steps">
+    <li>到左端連接面所在的視圖，<strong>建立 → 電纜槽連接器</strong>，點在「左端連接面」這個面上放置（放在面上是官方建議的做法，比放在工作平面上穩定）。</li>
+    <li>選取剛放的連接器，在內容面板把<strong>寬度</strong>用小型等號按鈕關聯到「標稱寬度」參數，<strong>高度</strong>關聯到「標稱高度」參數（兩個都要綁，只綁一個的話切換型式會跑版）。</li>
+    <li>用旋轉或翻轉工具，確認連接器箭頭朝向族的外側（背對本體中心）。</li>
+    <li>到右端連接面重複步驟 1 到 3，右邊的連接器箭頭也要朝外，兩端箭頭方向要相反。</li>
+    <li>檢查連接器中心是不是剛好落在族的長度中心軸線上，偏移的話用「對齊」工具拉回去。</li>
+    <li>數一下確認族裡只有這兩個連接器，沒有放錯地方或忘記刪除的多餘連接器。</li>
+  </ol>
+  <p><strong>完成後：</strong>兩端各有一個連接器圖示，切換型式時，連接器會跟著寬高變化一起移動。</p>
+  <p><strong>卡住時：</strong>連接器選不到「關聯參數」的等號按鈕，通常是寬高欄位被鎖成固定數字，先把欄位改回可以輸入公式的狀態再試一次。</p>
 </section>
 
 <!-- 6 -->
 <section id="test">
-  <h2><span class="no">6</span>族內測試</h2>
-  <p>每新增或修改一個參數就測一次，不要全部做完才測。</p>
-  <div class="table-wrap"><table>
-    <thead><tr><th>測試</th><th>做法</th><th>通過標準</th></tr></thead>
-    <tbody>
-      <tr><td>寬度</td><td>切換 200／300／400 型式</td><td>幾何和連接器同步變化，不破圖</td></tr>
-      <tr><td>高度</td><td>改標稱高度</td><td>幾何和連接器同步變化</td></tr>
-      <tr><td>長度</td><td>改本體總長度或套接長度</td><td>兩端位置正確，中央段跟著變</td></tr>
-      <tr><td>警告</td><td>檢查所有型式</td><td>沒有「限制條件不滿足」或過度約束的警告</td></tr>
-      <tr><td>詳細程度</td><td>切換粗略／中等／精細</td><td>顯示內容合理</td></tr>
-      <tr><td>（選用）可變長度</td><td>長度_輸入 = 100、600</td><td>分別被限制在範圍的下限、上限</td></tr>
-    </tbody>
-  </table></div>
+  <h2><span class="no">6</span>切換尺寸測試，存成 .rfa</h2>
+  <ol class="steps">
+    <li><strong>建立 → 族類型</strong>，逐一點選每一個型式（200、300、400⋯），每點一個都看一下平面圖、立面圖有沒有跑版或跳出警告。</li>
+    <li>改「本體總長度」或套接長度的數字，確認兩端連接器位置正確移動，中央段也跟著變長變短。</li>
+    <li>切換視圖左下角的詳細程度（粗略／中等／精細），確認三種都顯示合理，不是空白或破圖。</li>
+    <li>只要跳出任何黃色或紅色警告，都要點開看內容，回到步驟 4 檢查鎖定關係，不要留著警告繼續往下做。</li>
+    <li>全部型式都測過、沒有警告之後，<strong>檔案 → 儲存</strong>，檔名維持步驟 1 定的名稱，附檔名 .rfa。</li>
+  </ol>
+  <p><strong>完成後：</strong>所有型式都切換測試過，沒有跳出警告視窗，檔案已存檔。</p>
+  <p><strong>卡住時：</strong>只有某一個型式出問題，通常是那個型式的數字打錯（例如套接長度比本體總長度還長），回族類型視窗核對數字。</p>
 </section>
 
 <!-- 7 -->
 <section id="place">
-  <h2><span class="no">7</span>專案載入與放置</h2>
-
+  <h2><span class="no">7</span>載入專案並連接兩段線架</h2>
   <ol class="steps">
-    <li><strong>插入 → 載入族</strong>，選擇伸縮節的 <code>.rfa</code>。</li>
-    <li>確認族出現在 <strong>專案瀏覽器 → 族 → 電纜槽配件</strong>，不是在電氣設施底下。</li>
-    <li>確認左右兩段線架的寬度、高度、中心線、高程、方向都一致。<span class="tag t-na">待實機</span> 高程欄位名稱以屬性面板實際顯示的為準。</li>
-    <li><strong>系統 → 電氣 → 電纜槽配件</strong>，從類型選取器選擇伸縮節型式。<span class="tag t-ok">確認</span></li>
-    <li>點選<strong>第一段線架的端點</strong>放置。<span class="tag t-ok">確認</span> 官方文件只描述點選「一個」端點。</li>
-    <li>把第二段線架的端點拉到伸縮節另一端的連接器上。<strong>放置時不會自動填滿任意缺口</strong>，需要自動化的話要另外用 Dynamo 或 API。</li>
-    <li>把伸縮節旋轉 180° 再接一次，確認兩種方向都符合預期。有固定端和活動端的產品，仍要照產品方向放置。</li>
+    <li>打開要使用的 Revit 專案檔。</li>
+    <li><strong>插入 → 從資料庫載入 → 載入族</strong>，選步驟 6 存好的 .rfa 檔案。</li>
+    <li>展開<strong>專案瀏覽器 → 族</strong>，確認新載入的族出現在<strong>「電纜槽配件」</strong>底下，不是「電氣設施」底下。位置不對就回第 2 步重新設定族類別，再重新載入一次。</li>
+    <li>在平面或立面視圖，先確認要連接的兩段線架，寬度、高度、中心線、高程這幾個數字都一致（高程欄位名稱以屬性面板實際顯示的為準）。</li>
+    <li>上方頁籤<strong>系統 → 電氣 → 電纜槽配件</strong>，在類型選取器選你剛做的伸縮節型式。</li>
+    <li>滑鼠點第一段線架要接的那個端點，放置伸縮節。</li>
+    <li>放置後，把第二段線架的端點拖曳過去，接到伸縮節另一端的連接器上。<strong>系統不會自動幫你補滿中間的缺口，一定要手動拖過去對齊</strong>。</li>
+    <li>如果產品分固定端跟活動端，安裝方向要照廠商圖面，不能兩邊隨便接。建議把伸縮節旋轉 180° 再接一次，確認兩個方向都符合預期。</li>
   </ol>
-
-  <p>補充：<span class="tag t-ok">確認</span> Revit 2027 的族庫預設位置是 <code>%ALLUSERSPROFILE%\Autodesk\RVT 2027\Libraries</code>，這是族庫，不是族範本。</p>
+  <p><strong>完成後：</strong>兩段線架中間多了一段伸縮節，外觀看起來是連續的。</p>
+  <p><strong>卡住時：</strong>伸縮節吸附不上線架端點，回步驟 5 檢查連接器的寬高有沒有關聯參數、方向是不是朝外。</p>
+  <p>補充：Revit 2027 的族庫預設位置是 <code>%ALLUSERSPROFILE%\Autodesk\RVT 2027\Libraries</code>，這是放完成族的族庫，跟步驟 1 的族範本資料夾不是同一個地方。</p>
 </section>
 
 <!-- 8 -->
 <section id="verify">
-  <h2><span class="no">8</span>驗證與明細表</h2>
-
-  <div class="box ok">
-    <span class="box-title">主要驗證：顯示斷開連接</span>
-    <p><strong>分析 → 檢查系統 → 顯示斷開連接</strong>，勾選「Cable Tray and Conduit」（電纜槽與導管）。</p>
-    <p>伸縮節兩個接合處<strong>沒有斷開標記</strong>才算連通。遠端刻意留的開口不算失敗。</p>
-    <p><span class="tag t-na">待實機</span> 這個路徑是依 <strong>2016 版</strong>文件，繁中 2027 的實際字樣需要確認。</p>
-  </div>
-
-  <p><strong>輔助驗證</strong>：游標停在線架上按 Tab，看能不能依序反白整段；或小幅移動伸縮節再復原。這兩種都只能當輔助。</p>
-
-  <h3>明細表</h3>
-  <p>配件<strong>不會</strong>出現在「電纜槽」明細表，要另外建立「<strong>電纜槽配件</strong>」明細表，建議欄位：</p>
-  <p>族與型式、標稱寬度、標稱高度、本體總長度、安裝間隙、允許位移量、製造商、型號、數量、備註。</p>
-</section>
-
-<!-- 9 -->
-<section id="trouble">
-  <h2><span class="no">9</span>疑難排解</h2>
-  <div class="table-wrap"><table>
-    <thead><tr><th>狀況</th><th>優先檢查</th><th>處理方式</th></tr></thead>
-    <tbody>
-      <tr><td>專案裡找不到族</td><td>族類別</td><td>設為「電纜槽配件」</td></tr>
-      <tr><td>放置時不能吸附</td><td>連接器類型、方向</td><td>確認是電纜槽連接器、朝外、中心在軸線上</td></tr>
-      <tr><td>接上後尺寸不對</td><td>連接器寬、高沒關聯</td><td>兩個連接器的寬、高都綁到標稱參數</td></tr>
-      <tr><td>看起來接上，但有斷開標記</td><td>端點重合、高程、截面</td><td>先檢查專案端，再回族檢查連接器</td></tr>
-      <tr><td>改尺寸後破圖</td><td>過度約束、面直接鎖面</td><td>改由參考平面驅動</td></tr>
-      <tr><td>某些視圖看不到</td><td>VG／VV、詳細程度、視圖範圍、階段</td><td>依序檢查可見性設定，不是調透明度</td></tr>
-      <tr><td>出現零或負長度錯誤</td><td>套接長度大於本體長度</td><td>檢查型錄數值和公式</td></tr>
-      <tr><td>無法限制輸入範圍</td><td>Revit 沒有範圍欄位</td><td>用固定型式、<code>if()</code>，或 Dynamo／API</td></tr>
-      <tr><td>每個接頭都變成伸縮節</td><td>線架類型的預設聯結</td><td>改回一般接續片</td></tr>
-    </tbody>
-  </table></div>
-</section>
-
-<!-- 10 -->
-<section id="accept">
-  <h2><span class="no">10</span>最低驗收清單</h2>
-  <p>全部通過才能正式使用。勾選狀態只存在你這台電腦的瀏覽器。</p>
-  <ul class="checklist">
-    <li><label><input type="checkbox" data-id="a1"><span>族類別是「電纜槽配件」</span></label></li>
-    <li><label><input type="checkbox" data-id="a2"><span>零件類型是 Ladder Union 或 Channel Union</span></label></li>
-    <li><label><input type="checkbox" data-id="a3"><span>本體長度、套接長度、允許位移量都有廠商型錄依據</span></label></li>
-    <li><label><input type="checkbox" data-id="a4"><span>左右各有一個有效的電纜槽連接器，寬高會跟著型式變</span></label></li>
-    <li><label><input type="checkbox" data-id="a5"><span>所有型式切換都不破圖、沒有警告</span></label></li>
-    <li><label><input type="checkbox" data-id="a6"><span>載入後位在「族 → 電纜槽配件」</span></label></li>
-    <li><label><input type="checkbox" data-id="a7"><span>至少完成一組實際線架連接，「顯示斷開連接」沒有標記</span></label></li>
-    <li><label><input type="checkbox" data-id="a8"><span>電纜槽配件明細表可以正確統計</span></label></li>
-    <li><label><input type="checkbox" data-id="a9"><span>沒有設成線架類型的預設聯結</span></label></li>
-  </ul>
-  <p><button id="reset-checks" type="button" style="font:inherit;font-size:.85rem;padding:.3rem .9rem;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer">清除所有勾選</button></p>
+  <h2><span class="no">8</span>檢查是否接通，建立配件明細表</h2>
+  <ol class="steps">
+    <li>上方頁籤<strong>分析 → 檢查系統 → 顯示斷開連接</strong>（這個路徑是依 2016 版文件寫的，繁中 2027 實際選單位置或字樣可能不同，找不到就用關鍵字「檢查系統」或「斷開」搜尋指令）。</li>
+    <li>勾選 <strong>Cable Tray and Conduit</strong>（電纜槽與導管）後執行檢查。</li>
+    <li>看伸縮節兩端的接合處有沒有出現斷開標記，<strong>沒有標記代表這兩個接點是通的</strong>。遠端故意留空的開口不算失敗。</li>
+    <li>額外可以把滑鼠停在線架和伸縮節上按 <strong>Tab</strong> 鍵，看反白範圍能不能連續選到整段。<strong>這個方法只能當輔助參考，不能取代步驟 1 到 3 的檢查結果</strong>——反白連續不代表系統一定判定為連通。</li>
+    <li><strong>檢視 → 明細表 → 明細表/數量</strong>，類別選<strong>「電纜槽配件」</strong>（不是「電纜槽」，配件不會出現在電纜槽明細表裡）。</li>
+    <li>明細表欄位建議至少加入：族與型式、標稱寬度、標稱高度、本體總長度、安裝間隙、允許位移量、製造商、型號、數量、備註。<strong>要出現在明細表的自訂欄位（例如允許位移量），在步驟 3 建立參數時要選「共用參數」，不能選一般參數，否則明細表抓不到這個欄位。</strong></li>
+  </ol>
+  <p><strong>完成後：</strong>檢查系統沒有在伸縮節接點出現斷開標記，明細表能列出剛才放置的伸縮節數量與規格。</p>
+  <p><strong>卡住時：</strong>接點還是顯示斷開，先檢查專案端線架的高程、端點是不是真的對齊，再回族裡檢查連接器設定。<strong>一直接不上時，不要直接把族類別改成「一般模型」來繞過檢查——那樣會失去這個族原本該有的線架自動連接功能，問題要從連接器設定（步驟 5）去解決。</strong></p>
 </section>
 
 <!-- 流程圖 -->
 <section id="flow">
-  <h2><span class="no">★</span>流程圖</h2>
-  <p style="font-size:.85rem;color:var(--ink-2)">手機上流程圖可以左右滑動。</p>
-  <h3>A. 族製作</h3>
+  <h2><span class="no">•</span>流程圖</h2>
+  <p style="font-size:.85rem;color:var(--ink-2)">手機上流程圖可以左右滑動，數字對應上面的步驟。</p>
+  <h3>A. 族製作（步驟 1–6）</h3>
   <div class="mermaid-wrap"><pre class="mermaid">
 flowchart TD
-  A["取得廠商型錄<br>本體、套接、位移量"] --> B{"公司有既有<br>聯結配件族？"}
-  B -->|有| C["另存新檔修改"]
-  B -->|沒有| D["電纜槽配件類範本"]
-  C --> E["族類別：電纜槽配件<br>零件類型：Ladder／Channel Union"]
-  D --> E
-  E --> F["參考平面：平面、立面、長度方向<br>標註 → 參數 → 鎖定"]
-  F --> G["左右電纜槽連接器<br>寬高綁參數、朝外"]
-  G --> H{"族內測試<br>寬、高、長切換"}
-  H -->|破圖或警告| F
-  H -->|通過| I["建立型式並存檔"]
+  A["1 準備族或範本"] --> B["2 設定族類別／零件類型"]
+  B --> C["3 建立尺寸參數"]
+  C --> D["4 畫參考平面、鎖定幾何"]
+  D --> E["5 放置兩端連接器"]
+  E --> F{"6 切換型式測試"}
+  F -->|有警告或破圖| D
+  F -->|沒有警告| G["存成 .rfa"]
   </pre></div>
 
-  <h3>B. 專案使用</h3>
+  <h3>B. 專案使用（步驟 7–8）</h3>
   <div class="mermaid-wrap"><pre class="mermaid">
 flowchart TD
-  A["插入 → 載入族"] --> B["確認位於<br>族 → 電纜槽配件"]
+  A["7 插入 → 載入族"] --> B["確認位於<br>族 → 電纜槽配件"]
   B --> C["確認左右線架<br>寬、高、中心線、高程一致"]
-  C --> D["系統 → 電氣 → 電纜槽配件<br>點第一段線架端點"]
-  D --> E["第二段線架拉到另一端連接器"]
-  E --> F{"分析 → 檢查系統<br>顯示斷開連接"}
-  F -->|有標記| G["檢查連接器尺寸、方向、高程"]
+  C --> D["系統 → 電氣 → 電纜槽配件<br>點第一段線架端點放置"]
+  D --> E["拖曳第二段線架端點<br>接到伸縮節另一端連接器"]
+  E --> F{"8 分析 → 檢查系統<br>顯示斷開連接"}
+  F -->|有斷開標記| G["檢查連接器設定<br>不要改成一般模型"]
   G --> D
-  F -->|沒有標記| H["電纜槽配件明細表確認"]
+  F -->|沒有標記| H["建立電纜槽配件明細表"]
   </pre></div>
 </section>
 
-<!-- 11 -->
-<section id="open">
-  <h2><span class="no">11</span>尚未確認事項</h2>
-  <ol>
-    <li><strong>繁中 2027 介面名稱</strong>：零件類型的中文顯示、「顯示斷開連接」的位置與選項字樣、線架高程欄位名稱。</li>
-    <li><strong>廠商實際尺寸</strong>：沒有型錄之前，所有數值都只是示意。</li>
-    <li><strong>放置後的行為</strong>：聯結類配件夾在兩段線架中間時，第二段線架是否會自動修剪或連接。</li>
-    <li><strong>網格式線架</strong>要歸在哪一種零件類型。</li>
-    <li>製造商、型號在繁中 2027 是否為「識別資料」內建參數。</li>
-  </ol>
+<!-- 疑難排解 -->
+<section id="trouble">
+  <h2><span class="no">•</span>疑難排解</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>狀況</th><th>優先檢查</th><th>處理方式</th></tr></thead>
+    <tbody>
+      <tr><td>專案裡找不到族</td><td>族類別</td><td>回步驟 2 設為「電纜槽配件」，重新載入</td></tr>
+      <tr><td>放置時吸附不上</td><td>連接器類型、方向</td><td>回步驟 5：確認是電纜槽連接器、箭頭朝外、中心在軸線上</td></tr>
+      <tr><td>接上後尺寸不對</td><td>連接器寬、高沒關聯參數</td><td>回步驟 5：兩個連接器的寬、高都要綁到標稱參數</td></tr>
+      <tr><td>看起來接上，但有斷開標記</td><td>端點是否真的重合、高程、截面</td><td>先查專案端線架，再回族裡查連接器（步驟 8）</td></tr>
+      <tr><td>改尺寸後破圖</td><td>過度約束、面直接鎖面</td><td>回步驟 4，改由參考平面驅動，不要面鎖面</td></tr>
+      <tr><td>某些視圖看不到伸縮節</td><td>可見性設定、詳細程度、視圖範圍、階段</td><td>依序檢查可見性設定，不是調透明度</td></tr>
+      <tr><td>出現零或負長度錯誤</td><td>套接長度大於本體長度</td><td>回步驟 3，核對型錄數字和公式</td></tr>
+      <tr><td>每個接頭都變成伸縮節</td><td>線架類型的預設接頭設定</td><td>改回一般接續片（見步驟 2 警示）</td></tr>
+      <tr><td>怎麼接都顯示斷開</td><td>直接把族類別改成一般模型逃避檢查</td><td>不要這樣做，會失去自動連接功能；回頭排查連接器設定</td></tr>
+    </tbody>
+  </table></div>
 </section>
 
-<!-- 12 -->
-<section id="sources">
-  <h2><span class="no">12</span>資料來源</h2>
-  <ul>
-    <li><a href="https://help.autodesk.com/cloudhelp/2027/ENU/Revit-Customize/files/GUID-54F9DD0A-6F46-4B52-8F58-B8FA630F14EA.htm" target="_blank" rel="noopener">Part Types – Revit 2027 Help</a>：電纜槽配件零件類型清單、替換限制</li>
-    <li><a href="https://help.autodesk.com/cloudhelp/2027/ENU/Revit-MEPEng/files/GUID-F88D8921-5F1E-4FE2-B2A8-1ACBFCC6286A.htm" target="_blank" rel="noopener">Add Cable Tray Fittings – Revit 2027 Help</a>：放置路徑、點選端點</li>
-    <li><a href="https://help.autodesk.com/cloudhelp/2027/ENU/Revit-Model/files/GUID-C3A489CA-9FD2-408D-80CA-DCE0E42FACF8.htm" target="_blank" rel="noopener">Load Families in Context – Revit 2027 Help</a>：族庫預設路徑</li>
-    <li><a href="https://help.autodesk.com/cloudhelp/2026/ENU/Revit-Customize/files/GUID-68EFCA67-4913-4E00-AB9E-F2E6A7BEF8C6.htm" target="_blank" rel="noopener">Specify Family Category and Parameters – Revit 2026 Help</a>：零件類型決定族的行為</li>
-    <li><a href="https://help.autodesk.com/cloudhelp/2022/ENU/Revit-Customize/files/GUID-BE4F1954-1049-46EC-BCB2-D03D27B4C77A.htm" target="_blank" rel="noopener">Place a Connector – Revit 2022 Help</a>：連接器放在面或工作平面上</li>
-    <li><a href="https://help.autodesk.com/cloudhelp/2016/ENU/Revit-Model/files/GUID-F70AE6D6-8AF4-496F-8175-1BBD737FF8C2.htm" target="_blank" rel="noopener">About Check Duct Systems – Revit 2016 Help</a>：顯示斷開連接、Cable Tray and Conduit 選項</li>
-    <li><a href="https://www.revitapidocs.com/2015/4182a378-a3cc-7f0c-87b3-d230c2540267.htm" target="_blank" rel="noopener">PartType Enumeration – Revit API 2015</a>：LadderCableTrayUnion／ChannelCableTrayUnion</li>
-    <li><a href="https://forums.autodesk.com/t5/revit-api-forum/how-to-set-fitting-of-union-like-a-cable-tray-by/td-p/10159799" target="_blank" rel="noopener">How to set Fitting of Union like a cable tray – Autodesk Community</a>：預設聯結套用到該類型所有線架</li>
-    <li><a href="https://www.autodesk.com/support/technical/article/caas/sfdcarticles/sfdcarticles/How-to-install-Revit-project-and-family-templates.html" target="_blank" rel="noopener">How to install Revit project and family templates – Autodesk</a>：範本預設路徑與缺少時的處理</li>
+<!-- 最低驗收清單 -->
+<section id="accept">
+  <h2><span class="no">•</span>最低驗收清單</h2>
+  <p>全部通過才能正式使用。勾選狀態只存在你這台電腦的瀏覽器。</p>
+  <ul class="checklist">
+    <li><label><input type="checkbox" data-id="a1"><span>族類別是「電纜槽配件」</span></label></li>
+    <li><label><input type="checkbox" data-id="a2"><span>零件類型是 Ladder Union 或 Channel Union</span></label></li>
+    <li><label><input type="checkbox" data-id="a3"><span>本體總長度、套接長度、允許位移量都有廠商型錄依據，不是練習用示範值</span></label></li>
+    <li><label><input type="checkbox" data-id="a4"><span>左右各有一個有效的電纜槽連接器，寬、高都跟著型式變化</span></label></li>
+    <li><label><input type="checkbox" data-id="a5"><span>所有型式切換都不破圖、沒有警告</span></label></li>
+    <li><label><input type="checkbox" data-id="a6"><span>載入後位在「族 → 電纜槽配件」</span></label></li>
+    <li><label><input type="checkbox" data-id="a7"><span>至少完成一組實際線架連接，「顯示斷開連接」沒有標記</span></label></li>
+    <li><label><input type="checkbox" data-id="a8"><span>電纜槽配件明細表可以正確統計數量與規格</span></label></li>
+    <li><label><input type="checkbox" data-id="a9"><span>沒有把伸縮節設成線架類型的預設接頭</span></label></li>
   </ul>
+  <p><button id="reset-checks" type="button" style="font:inherit;font-size:.85rem;padding:.3rem .9rem;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer">清除所有勾選</button></p>
+</section>
+
+<!-- 尚未確認 -->
+<section id="open">
+  <h2><span class="no">•</span>尚未確認事項</h2>
+  <p>以下項目還沒有在 Revit 2027 繁體中文版實機操作確認過，主要集中在：介面上的中文顯示字樣（零件類型、「顯示斷開連接」選單位置與字樣、高程欄位名稱）、聯結配件夾在兩段線架中間時第二段線架會不會自動修剪、網格式線架該歸在哪一種零件類型、製造商與型號是否為「識別資料」內建參數。各步驟裡影響操作判斷的地方，已經在該步驟用文字提醒過一次，實際操作時仍要對照畫面調整。</p>
+</section>
+
+<!-- 資料來源 -->
+<section id="sources">
+  <h2><span class="no">•</span>資料來源</h2>
+  <details>
+    <summary>展開看官方資料來源</summary>
+    <ul>
+      <li><a href="https://help.autodesk.com/cloudhelp/2027/ENU/Revit-Customize/files/GUID-54F9DD0A-6F46-4B52-8F58-B8FA630F14EA.htm" target="_blank" rel="noopener">Part Types – Revit 2027 Help</a>：電纜槽配件零件類型清單、替換限制</li>
+      <li><a href="https://help.autodesk.com/cloudhelp/2027/ENU/Revit-MEPEng/files/GUID-F88D8921-5F1E-4FE2-B2A8-1ACBFCC6286A.htm" target="_blank" rel="noopener">Add Cable Tray Fittings – Revit 2027 Help</a>：放置路徑、點選端點</li>
+      <li><a href="https://help.autodesk.com/cloudhelp/2027/ENU/Revit-Model/files/GUID-C3A489CA-9FD2-408D-80CA-DCE0E42FACF8.htm" target="_blank" rel="noopener">Load Families in Context – Revit 2027 Help</a>：族庫預設路徑</li>
+      <li><a href="https://help.autodesk.com/cloudhelp/2026/ENU/Revit-Customize/files/GUID-68EFCA67-4913-4E00-AB9E-F2E6A7BEF8C6.htm" target="_blank" rel="noopener">Specify Family Category and Parameters – Revit 2026 Help</a>：零件類型決定族的行為</li>
+      <li><a href="https://help.autodesk.com/cloudhelp/2022/ENU/Revit-Customize/files/GUID-BE4F1954-1049-46EC-BCB2-D03D27B4C77A.htm" target="_blank" rel="noopener">Place a Connector – Revit 2022 Help</a>：連接器放在面或工作平面上</li>
+      <li><a href="https://help.autodesk.com/cloudhelp/2016/ENU/Revit-Model/files/GUID-F70AE6D6-8AF4-496F-8175-1BBD737FF8C2.htm" target="_blank" rel="noopener">About Check Duct Systems – Revit 2016 Help</a>：顯示斷開連接、Cable Tray and Conduit 選項</li>
+      <li><a href="https://www.revitapidocs.com/2015/4182a378-a3cc-7f0c-87b3-d230c2540267.htm" target="_blank" rel="noopener">PartType Enumeration – Revit API 2015</a>：LadderCableTrayUnion／ChannelCableTrayUnion 對應的內部名稱</li>
+      <li><a href="https://forums.autodesk.com/t5/revit-api-forum/how-to-set-fitting-of-union-like-a-cable-tray-by/td-p/10159799" target="_blank" rel="noopener">How to set Fitting of Union like a cable tray – Autodesk Community</a>：預設聯結套用到該類型所有線架</li>
+      <li><a href="https://www.autodesk.com/support/technical/article/caas/sfdcarticles/sfdcarticles/How-to-install-Revit-project-and-family-templates.html" target="_blank" rel="noopener">How to install Revit project and family templates – Autodesk</a>：範本預設路徑與缺少時的處理</li>
+    </ul>
+  </details>
 </section>
 
 <footer>
-  <p>文件核對版／待 Revit 2027 繁中介面及實機放置行為驗收。所有數值為示意，以廠商型錄為準。</p>
+  <p>新手操作指南，正式使用前請跟廠商型錄核對數字，並在 Revit 2027 繁體中文介面實際操作一次再上線使用。</p>
 </footer>
 
 </main>
