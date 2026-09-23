@@ -1,0 +1,154 @@
+/* Revit 2027 電纜槽伸縮節指南 — 大字易讀版 */
+:root {
+  --fs: 20px;
+  --bg: #f7f7f4;
+  --surface: #ffffff;
+  --ink: #1b1d21;
+  --ink-2: #474b53;
+  --line: #d9dbe0;
+  --accent: #1f5fbf;
+  --accent-soft: #e6eefb;
+  --warn: #9a4d00;
+  --warn-soft: #fff3e0;
+  --danger: #b3261e;
+  --danger-soft: #fdecea;
+  --ok: #1e7a3c;
+  --ok-soft: #e7f5ec;
+  --code-bg: #eef0f3;
+  --radius: 12px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #15171a; --surface: #1e2126; --ink: #eceef1; --ink-2: #b7bcc5; --line: #343942;
+    --accent: #7fb0ff; --accent-soft: #1d2a40; --warn: #ffb866; --warn-soft: #34281a;
+    --danger: #ff8a80; --danger-soft: #3a1f1d; --ok: #7ed69a; --ok-soft: #1a3224; --code-bg: #2a2e35;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #15171a; --surface: #1e2126; --ink: #eceef1; --ink-2: #b7bcc5; --line: #343942;
+  --accent: #7fb0ff; --accent-soft: #1d2a40; --warn: #ffb866; --warn-soft: #34281a;
+  --danger: #ff8a80; --danger-soft: #3a1f1d; --ok: #7ed69a; --ok-soft: #1a3224; --code-bg: #2a2e35;
+}
+
+* { box-sizing: border-box; }
+html { font-size: var(--fs); -webkit-text-size-adjust: 100%; scroll-behavior: smooth; scroll-padding-top: 5rem; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: "Noto Sans TC", "Microsoft JhengHei", "PingFang TC", system-ui, sans-serif;
+  line-height: 1.85; letter-spacing: .02em;
+}
+code, .mono { font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; font-size: .9em; }
+code { background: var(--code-bg); padding: .1em .4em; border-radius: 6px; word-break: break-all; }
+a { color: var(--accent); }
+
+/* 工具列 */
+.toolbar {
+  position: sticky; top: 0; z-index: 10; background: var(--surface);
+  border-bottom: 1px solid var(--line); padding: .5rem 16px;
+}
+.toolbar-inner { max-width: 880px; margin: 0 auto; display: flex; gap: .5rem; align-items: center; justify-content: space-between; }
+.toolbar strong { font-size: .85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.toolbar .btns { display: flex; gap: .4rem; flex-shrink: 0; }
+.toolbar button {
+  font: inherit; font-size: .8rem; min-width: 2.6rem; min-height: 2.4rem; padding: 0 .6rem;
+  border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--ink); cursor: pointer;
+}
+.toolbar button:hover { border-color: var(--accent); }
+
+main { max-width: 880px; margin: 0 auto; padding: 1.5rem 16px 4rem; }
+
+/* 頁首 */
+.hero h1 { font-size: 1.75rem; line-height: 1.35; margin: .5rem 0 .75rem; }
+.status { display: inline-block; font-size: .8rem; font-weight: 700; padding: .15rem .7rem; border-radius: 999px; background: var(--warn-soft); color: var(--warn); }
+.meta { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: .75rem; margin: 1.25rem 0; }
+.meta div { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: .75rem 1rem; }
+.meta dt { font-size: .75rem; color: var(--ink-2); }
+.meta dd { margin: 0; font-weight: 700; }
+
+/* 目錄 */
+.toc { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 1rem 1.25rem; margin: 1.5rem 0; }
+.toc h2 { font-size: 1rem; margin: 0 0 .5rem; }
+.toc ol { margin: 0; padding-left: 1.4rem; columns: 2; column-gap: 2rem; }
+.toc li { break-inside: avoid; }
+@media (max-width: 640px) { .toc ol { columns: 1; } }
+
+/* 區段 */
+section { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.25rem 1.25rem 1rem; margin: 1.5rem 0; }
+section > h2 { font-size: 1.35rem; line-height: 1.4; margin: 0 0 1rem; display: flex; gap: .6rem; align-items: baseline; }
+section > h2 .no { flex-shrink: 0; display: inline-grid; place-items: center; width: 2rem; height: 2rem; border-radius: 50%; background: var(--accent); color: var(--surface); font-size: 1rem; }
+h3 { font-size: 1.1rem; margin: 1.5rem 0 .5rem; }
+p, li { margin: .4rem 0; }
+ol, ul { padding-left: 1.4rem; }
+
+/* 提示框 */
+.box { border-radius: var(--radius); padding: .9rem 1.1rem; margin: 1rem 0; border-left: 6px solid; }
+.box > :first-child { margin-top: 0; } .box > :last-child { margin-bottom: 0; }
+.box-title { font-weight: 800; display: block; margin-bottom: .25rem; }
+.warn { background: var(--warn-soft); border-color: var(--warn); }
+.danger { background: var(--danger-soft); border-color: var(--danger); }
+.info { background: var(--accent-soft); border-color: var(--accent); }
+.ok { background: var(--ok-soft); border-color: var(--ok); }
+
+/* 標籤 */
+.tag { display: inline-block; font-size: .72rem; font-weight: 700; padding: 0 .5rem; border-radius: 6px; vertical-align: .12em; white-space: nowrap; }
+.t-ok { background: var(--ok-soft); color: var(--ok); }
+.t-guess { background: var(--warn-soft); color: var(--warn); }
+.t-na { background: var(--danger-soft); color: var(--danger); }
+
+/* 表格 */
+.table-wrap { overflow-x: auto; margin: 1rem 0; border: 1px solid var(--line); border-radius: var(--radius); }
+table { border-collapse: collapse; width: 100%; min-width: 560px; font-size: .92rem; }
+th, td { text-align: left; vertical-align: top; padding: .6rem .8rem; border-bottom: 1px solid var(--line); }
+th { background: var(--code-bg); font-weight: 700; white-space: nowrap; }
+tr:last-child td { border-bottom: 0; }
+
+/* 示意圖 */
+.figure { margin: 1rem 0; }
+.figure { margin: 1rem 0 1.5rem; }
+.figure figcaption { font-size: .8rem; color: var(--ink-2); text-align: center; margin-top: .3rem; }
+.body-fig { display: flex; align-items: stretch; }
+.body-fig .seg {
+  flex: 1; display: grid; place-items: center; text-align: center; padding: .8rem .3rem;
+  background: var(--accent-soft); border: 2px solid var(--accent); font-weight: 700; font-size: .9rem; line-height: 1.4;
+}
+.body-fig .seg.mid { flex: 1.6; background: var(--bg); border-style: dashed; border-color: var(--ink-2); border-left: 0; border-right: 0; }
+.body-fig .seg small { font-weight: 400; font-size: .75rem; }
+.body-fig .con { display: flex; flex-direction: column; justify-content: center; align-items: center; color: var(--danger); font-size: 1.2rem; line-height: 1; padding: 0 .2rem; }
+.body-fig .con small { color: var(--ink-2); font-size: .6rem; writing-mode: vertical-rl; margin-top: .3rem; }
+.dim { text-align: center; font-size: .85rem; font-weight: 700; margin-top: .6rem; color: var(--ink-2); }
+
+/* 核取清單 */
+.checklist { list-style: none; padding: 0; }
+.checklist li { margin: .35rem 0; }
+.checklist label { display: flex; gap: .7rem; align-items: flex-start; cursor: pointer; padding: .35rem .2rem; border-radius: 8px; }
+.checklist input { width: 1.2rem; height: 1.2rem; margin-top: .35rem; flex-shrink: 0; accent-color: var(--ok); }
+.checklist input:checked + span { color: var(--ink-2); text-decoration: line-through; }
+
+/* 步驟 */
+.steps { counter-reset: s; list-style: none; padding: 0; }
+.steps > li { counter-increment: s; position: relative; padding-left: 2.6rem; margin: .8rem 0; }
+.steps > li::before {
+  content: counter(s); position: absolute; left: 0; top: .15rem; width: 1.8rem; height: 1.8rem;
+  display: grid; place-items: center; border-radius: 50%; border: 2px solid var(--accent); color: var(--accent); font-weight: 800; font-size: .85rem;
+}
+
+/* 流程圖 */
+.mermaid-wrap { overflow-x: auto; background: var(--bg); border: 1px solid var(--line); border-radius: var(--radius); padding: 1rem; margin: 1rem 0; }
+pre.mermaid { margin: 0; white-space: pre; font-size: .8rem; text-align: center; }
+
+details { border: 1px solid var(--line); border-radius: var(--radius); padding: .6rem 1rem; margin: 1rem 0; }
+summary { cursor: pointer; font-weight: 700; }
+
+footer { color: var(--ink-2); font-size: .82rem; text-align: center; margin-top: 2rem; }
+
+@media (max-width: 640px) {
+  :root { --fs: 18px; }
+  .hero h1 { font-size: 1.5rem; }
+  section { padding: 1rem; }
+}
+
+@media print {
+  .toolbar, .toc { display: none; }
+  body { background: #fff; }
+  section { break-inside: avoid-page; border-color: #bbb; }
+}
